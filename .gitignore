@@ -1,0 +1,14 @@
+/certs/*
+!/certs/.gitkeep
+
+/conf.d/*
+!/conf.d/.gitkeep
+!/conf.d/sample_conf
+
+/sites/*
+!/sites/sample.site
+
+/db/.env
+
+/.env
+

@@ -1,0 +1,25 @@
+# HTTP -> HTTPS для course.grewi
+# host.name - Имя хоста из hosts которое нужно направить в контейнер
+# container_name - Имя контейнера из docker-compose.yml сайта 
+server {
+    listen 80;
+    server_name host.name;
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS для course.grewi
+server {
+    listen 443 ssl;
+    server_name host.name;
+
+    ssl_certificate     /etc/nginx/certs/course.grewi.pem;
+    ssl_certificate_key /etc/nginx/certs/course.grewi-key.pem;
+
+    location / {
+        proxy_pass http://container_name:80;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

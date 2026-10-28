@@ -1,0 +1,49 @@
+discovery.docker "containers" {
+  host = "unix:///var/run/docker.sock"
+
+  filter {
+    name   = "name"
+    values = ["main-nginx"]
+  }
+}
+
+discovery.relabel "nginx_logs" {
+  targets = discovery.docker.containers.targets
+
+  rule {
+    source_labels = ["__meta_docker_container_name"]
+    regex         = "/(.*)"
+    target_label  = "container"
+  }
+
+  rule {
+    source_labels = ["__meta_docker_container_log_stream"]
+    target_label  = "stream"
+  }
+}
+
+loki.source.docker "nginx" {
+  host       = "unix:///var/run/docker.sock"
+  targets    = discovery.relabel.nginx_logs.output
+  forward_to = [loki.process.nginx.receiver] 
+}
+
+loki.process "nginx" {
+  forward_to = [loki.write.local.receiver]
+
+  stage.regex {
+    expression = `^(?P<remote_addr>\S+) - (?P<remote_user>\S+) \[(?P<time_local>[^\]]+)\] "(?P<method>\S+) (?P<path>\S+) [^"]+" (?P<status>\d+) (?P<bytes>\d+) "[^"]*" "[^"]*" "(?P<domain>[^"]*)"`
+  }
+
+  stage.labels {
+    values = {
+      domain = "", 
+    }
+  }
+}
+
+loki.write "local" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

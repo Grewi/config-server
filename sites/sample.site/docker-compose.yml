@@ -1,0 +1,25 @@
+services:
+  site-course:
+    build:
+      context: ../..
+      dockerfile: bin/${PHPVERSION}/Dockerfile
+    container_name: site-course
+    user: "1000:1000"                # совпадение с владельцем папок на хосте
+    volumes:
+      - ./html:/var/www/html
+      - ./logs:/var/log/apache2
+            # секреты вне compose-файла
+    networks:
+      - webnet
+    restart: unless-stopped
+    mem_limit: 512m
+    cpus: "0.50"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  webnet:
+    external: true

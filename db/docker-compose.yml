@@ -1,0 +1,38 @@
+services:
+  db:
+    container_name: ${DB_CONTAINER_NAME}
+    build:
+      context: ..
+      dockerfile: bin/${DATABASE}/Dockerfile
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - webnet
+    restart: unless-stopped
+
+  pma:
+    container_name: ${PMA_CONTAINER_NAME}
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: db          # имя сервиса, а не переменная
+      PMA_PORT: 3306
+    ports:
+      - "${PMA_PORT_WEB}:80"
+    depends_on:
+      - db
+    networks:
+      - webnet
+    restart: unless-stopped
+
+volumes:
+  db_data:
+    name: ${DB_VOLUME_NAME}
+
+networks:
+  webnet:
+    external: true
