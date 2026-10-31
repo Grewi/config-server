@@ -31,11 +31,25 @@ fi
 # 3. Последовательный запуск стеков
 #    Порядок важен: сначала главный Nginx и БД, потом сайт.
 
-STACKS=(
-  "."                         # Главный Nginx (корень)
-  "db"                        # База
-  "sites/course.grewi"        # Сайт
-)
+LIST_FILE="$BASE_DIR/.stacks.list"
+if [[ ! -f "$LIST_FILE" ]]; then
+  err "Не найден $LIST_FILE"
+  exit 1
+fi
+
+extra=()
+while IFS= read -r line || [[ -n "$line" ]]; do
+  # trim
+  line="${line#"${line%%[![:space:]]*}"}"
+  line="${line%"${line##*[![:space:]]}"}"
+  # пропускаем пустые и комментарии
+  [[ -z "$line" || "$line" == \#* ]] && continue
+  # защита от дублирования корня
+  [[ "$line" == "." ]] && continue
+  extra+=("$line")
+done < "$LIST_FILE"
+
+STACKS=( "." "db" "${extra[@]}" )
 
 for stack in "${STACKS[@]}"; do
   dir="$BASE_DIR/$stack"
