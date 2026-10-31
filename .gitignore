@@ -2,7 +2,6 @@
 !/certs/.gitkeep
 
 /conf.d/*
-!/conf.d/.gitkeep
 !/conf.d/sample_conf
 
 /sites/*
