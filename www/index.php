@@ -34,7 +34,7 @@ foreach ($files as $file) {
 
 <head>
     <meta charset="utf-8" />
-    <title>Electronic</title>
+    <title>D-Electronic</title>
 </head>
 
 <body>

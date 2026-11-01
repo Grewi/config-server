@@ -6,9 +6,8 @@ services:
     container_name: site-course
     user: "1000:1000"                # совпадение с владельцем папок на хосте
     volumes:
-      - ./html:/var/www/html
+      - ../../../www/site_dir:/var/www/html
       - ./logs:/var/log/apache2
-            # секреты вне compose-файла
     networks:
       - webnet
     restart: unless-stopped

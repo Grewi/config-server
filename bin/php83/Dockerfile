@@ -111,8 +111,4 @@ RUN usermod -u 1000 www-data -d /var/www/html
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# настройка логов
-run sed -i 's~^\s*customlog.*~customlog "|/usr/bin/rotatelogs -l -f /var/log/apache2/access.log.%y-%m-%d 86400" combined~' /etc/apache2/sites-available/000-default.conf
-run sed -i 's~^\s*errorlog.*~errorlog "|/usr/bin/rotatelogs -l -f /var/log/apache2/error.log.%y-%m-%d 86400"~' /etc/apache2/sites-available/000-default.conf
-run sed -i 's~^\s*errorlog.*~errorlog "|/usr/bin/rotatelogs -l -f /var/log/apache2/error.log.%y-%m-%d 86400"~' /etc/apache2/apache2.conf
 
