@@ -12,9 +12,11 @@ running="$(docker ps -q)"
 
 if [[ -n "$running" ]]; then
   info "Останавливаю все запущенные контейнеры..."
-  docker stop $running >/dev/null
-  docker rm $running >/dev/null
+  docker stop $running 
   ok "Все контейнеры остановлены"
+  info "Удаляю контейнеры..."
+  docker rm $running 
+  ok "Все контейнеры удалены"
 else
   info "Запущенных контейнеров нет"
 fi
