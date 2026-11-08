@@ -1,11 +1,30 @@
 <?php
 // test
 $configDir = '/etc/nginx/conf.d';
+$stacksFile = '/var/www/.stacks.list';
+
+$stacks = explode(PHP_EOL, file_get_contents($stacksFile));
+foreach ($stacks as &$i) {
+    $i = str_replace('sites/', '', $i) . '.conf';
+}
+
+// print_r($stacks);
+// exit();
+
 $hosts = [];
 
 $files = glob($configDir . '/*.conf');
 $list = [];
+$badList = [];
 foreach ($files as $file) {
+    // Показываем кофиг если он есть в списке
+    $fn = str_replace($configDir . '/', '', $file);
+
+    // print_r($fn . PHP_EOL);
+    if (!in_array($fn, $stacks)) {
+        continue;
+    }
+
     $content = file_get_contents($file);
     if (preg_match_all('/server_name\s+([^;]+);/', $content, $matches)) {
         $hosts = [];

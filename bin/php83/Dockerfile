@@ -45,30 +45,23 @@ RUN pecl install xdebug-3.3.2 && \
     docker-php-ext-enable xdebug && \
     mkdir /var/log/xdebug
 
-# Install redis
-# RUN pecl install redis-6.0.2 && \
-#     docker-php-ext-enable redis
 
-# Install imagick
+# Install imagick (from source, bypassing broken PECL 3.7.0 for PHP 8.3)
 RUN apt-get update && \
     apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
-    rm -rf /var/lib/apt/lists/*
-
-# Imagick Commit to install
-# https://github.com/Imagick/imagick
-ARG IMAGICK_COMMIT="28f27044e435a2b203e32675e942eb8de620ee58"
-
-RUN cd /usr/local/src && \
-    git clone https://github.com/Imagick/imagick && \
-    cd imagick && \
-    git checkout ${IMAGICK_COMMIT} && \
+    rm -rf /var/lib/apt/lists/* && \
+    # Скачиваем актуальный мастер-архив с GitHub
+    curl -L -o /tmp/imagick.tar.gz https://github.com/Imagick/imagick/archive/refs/heads/master.tar.gz && \
+    mkdir -p /tmp/imagick-src && \
+    tar --strip-components=1 -xzf /tmp/imagick.tar.gz -C /tmp/imagick-src && \
+    cd /tmp/imagick-src && \
     phpize && \
     ./configure && \
     make && \
     make install && \
-    cd .. && \
-    rm -rf imagick && \
-    docker-php-ext-enable imagick
+    docker-php-ext-enable imagick && \
+    rm -rf /tmp/imagick*
+
 
 # Other PHP8 Extensions
 

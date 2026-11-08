@@ -16,6 +16,7 @@ server {
     ssl_certificate_key /etc/nginx/certs/course.grewi-key.pem;
 
     location / {
+        resolver 127.0.0.11 valid=10s ipv6=off;
         set $backend http://container_name:80;
         proxy_pass $backend;
         proxy_set_header Host $host;
