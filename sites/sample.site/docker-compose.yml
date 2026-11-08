@@ -1,9 +1,9 @@
 services:
-  site-course:
+  site-name:
     build:
       context: ../..
       dockerfile: bin/${PHPVERSION}/Dockerfile
-    container_name: site-course
+    container_name: site-name
     user: "1000:1000"                # совпадение с владельцем папок на хосте
     volumes:
       - ../../../www/site_dir:/var/www/html
