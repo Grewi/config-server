@@ -99,7 +99,7 @@ foreach ($files as $file) {
         }
 
         .cat {
-            width: 200px;
+            min-width: 200px;
         }
 
         .a {
