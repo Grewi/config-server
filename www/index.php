@@ -71,6 +71,7 @@ foreach ($files as $file) {
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
 
         .bl {
@@ -98,7 +99,7 @@ foreach ($files as $file) {
         }
 
         .cat {
-            width: 200px;
+            min-width: 200px;
         }
 
         .a {
@@ -108,6 +109,17 @@ foreach ($files as $file) {
             font-size: large;
             text-decoration: none;
         }
+        .github {
+            margin-top: 10px;
+            color: #fff;
+            font-family: monospace;
+            text-decoration: none;
+            transition: 0.5s;
+        }
+        .github:hover {
+            color: #00ed35;
+        }
+        
     </style>
     <div class="wp">
         <div class="bl">
@@ -132,6 +144,9 @@ foreach ($files as $file) {
                     <?php endforeach; ?>
                 </div>
             </div>
+        </div>
+        <div>
+            <a class="github" href="https://github.com/Grewi/config-server" target="_blank">GitHub</a>
         </div>
     </div>
 </body>
