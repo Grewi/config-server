@@ -58,7 +58,7 @@ for stack in "${STACKS[@]}"; do
     exit 1
   fi
   info "Запускаю стек '$stack'..."
-  ( cd "$dir" && docker compose up -d )
+  ( cd "$dir" && docker compose up -d --force-recreate)
   ok "Стек '$stack' запущен"
 done
 
