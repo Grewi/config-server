@@ -108,6 +108,14 @@ RUN rm -rf /usr/src/*
 RUN mkdir -p /home/app/.config && chown -R 1000:1000 /home/app
 RUN usermod -u 1000 www-data -d /var/www/html
 
+# Создание каталога и предоставление прав пользователю www-data
+RUN mkdir -p /var/lib/php/sessions \
+    && chown -R 1000:1000 /var/lib/php/sessions \
+    && chmod 1733 /var/lib/php/sessions
+
+# Запись конфигурации в отдельный ini-файл 
+RUN echo "session.save_path = /var/lib/php/sessions" > /usr/local/etc/php/conf.d/session.ini
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 
