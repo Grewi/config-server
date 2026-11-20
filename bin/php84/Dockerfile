@@ -47,10 +47,6 @@ RUN pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     mkdir /var/log/xdebug
 
-# Install redis
-RUN pecl install redis-6.2.0 && \
-    docker-php-ext-enable redis
-
 # Install imagick
 RUN apt-get update && \
     apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
@@ -104,6 +100,7 @@ RUN a2enmod rewrite headers
 # Cleanup
 RUN rm -rf /usr/src/*
 
+RUN mkdir -p /home/app/.config && chown -R 1000:1000 /home/app
 RUN usermod -u 1000 www-data -d /var/www/html
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer

@@ -99,6 +99,8 @@ RUN a2enmod rewrite headers
 # Cleanup
 RUN rm -rf /usr/src/*
 
+RUN mkdir -p /home/app/.config && chown -R 1000:1000 /home/app
+
 # RUN usermod -u 1000 www-data 
 RUN usermod -u 1000 www-data -d /var/www/html
 
